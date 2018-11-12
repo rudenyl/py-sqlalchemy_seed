@@ -41,7 +41,7 @@ def drop_table(base, session):
     base.metadata.drop_all()
 
 
-def load_fixture_files(paths, files):
+def load_fixture_files(paths, files, yaml_loader=None):
     """Load fixture files.
 
     :param path: Path to fixtures
@@ -59,7 +59,10 @@ def load_fixture_files(paths, files):
 
             with open(fixture_path, 'r') as f:
                 if file.endswith('.yaml') or file.endswith('.yml'):
-                    data = yaml.load(f)
+                    if yaml_loader:
+                        data = yaml.load(f, Loader=yaml_loader)
+                    else:
+                        data = yaml.load(f)
                 elif file.endswith('.json'):
                     data = json.loads(f)
                 else:
